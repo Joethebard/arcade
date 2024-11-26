@@ -2,6 +2,7 @@ import rps
 import guessthenumber
 import coinledger
 import sys
+import os
 
 def welcome():
     print("Welcome to the Arcade!")
@@ -18,11 +19,13 @@ def main():
         print("4. Check Balance")
         choice = input("Enter your choice: 1, 2, 3 or 4: ")
         if choice == "1":
-            rps.init()
+            rps.init(ledger)
         elif choice == "2":
-            guessthenumber.init()
+            guessthenumber.init(ledger)
         elif choice == "3":
             print("Thanks for playing!")
+            if os.path.exists(ledger.save_file):
+                os.remove(ledger.save_file)
             sys.exit()
         elif choice == "4":
             ledger.check_balance()
