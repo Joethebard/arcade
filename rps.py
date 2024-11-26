@@ -1,11 +1,15 @@
 import random
 import time
 import sys
+import arcadehub
+from coinledger import CoinLedger
+
+ledger = CoinLedger()
 
 def init(): #simplest way i can think of to call the title to each game(i think)
     print("Rock, Paper, Scissors")
     print("*********************")
-    playrps()
+    play_rps()
 
 class RPS:
     ROCK = 1
@@ -14,15 +18,25 @@ class RPS:
 
 player_score = 0
 computer_score = 0
+balance = 100
 
-def playrps():# i guess i dont need to tab the function
+def play_rps():# i guess i dont need to tab the function
+    global balance
+    print(f"Your balance is ${balance}.")
+    bet = input("How much do you want to bet? ")
+    bet = int(bet)
+    print(f"You bet ${bet}.")
+
     user_choice = input("Enter your choice... \n1 for Rock, 2 for Paper, 3 for Scissors: ")
     if user_choice not in ["1", "2", "3"]:
         print("Invalid choice. Please enter 1, 2, or 3.")
-        return playrps()
+        return play_rps()
+    
+
     
     user_choice = int(user_choice)
     computer_choice = random.choice([RPS.ROCK, RPS.PAPER, RPS.SCISSORS])
+
 
     choices = {1: "Rock", 2: "Paper", 3: "Scissors"}
     print(f"You chose: {choices[user_choice]}")
@@ -42,27 +56,32 @@ def playrps():# i guess i dont need to tab the function
     if "--You win!--" in result:
         global player_score
         player_score += 1
+        balance += bet
     elif "--You lose!--" in result:
         global computer_score
         computer_score += 1
-
+        balance -= bet
     print(f"Player score: {player_score}")
     print(f"Computer score: {computer_score}")
+    print(f"Your balance is ${balance}.")
     decide_winner(user_choice, computer_choice)
 
     
     def play_again():
-        player_choice = input("Do you want to play again? (y/n): ").lower()
+        player_choice = input("Do you want to play again? (y/n) \nPress A to return to the Arcade: ").lower()
         if player_choice == "y":
-            return playrps()
+            return play_rps()
         elif player_choice == "n":
             print("--Thanks for playing!--")
             sys.exit()
+        elif player_choice == "a":
+            return arcadehub.main()
         else:
-            print("--Invalid choice. Please enter y or n.--")
+            print("--Invalid choice. Please enter something valid.--")
             return play_again()
     play_again()
 
 if __name__ == "__main__":
-    playrps()
+    play_rps()
+    arcadehub.main()
 
